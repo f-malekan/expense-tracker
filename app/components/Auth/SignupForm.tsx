@@ -3,6 +3,7 @@
 import { signup } from "@/app/actions/auth";
 import { useActionState } from "react";
 import BaseInput from "../Base/BaseInput";
+import BaseButton from "../Base/BaseButton";
 
 export default function SignupForm() {
   const [state, action, pending] = useActionState(signup, undefined);
@@ -36,9 +37,10 @@ export default function SignupForm() {
         className="mb-4"
         error={state?.errors?.password}
       />
-      <button disabled={pending} type="submit">
+      {/* <button disabled={pending} type="submit">
         Sign Up
-      </button>
+      </button> */}
+      <BaseButton type="submit">ثبت نام</BaseButton>
     </form>
   );
 }
