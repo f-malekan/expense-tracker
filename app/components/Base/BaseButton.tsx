@@ -15,16 +15,25 @@ const BaseButton = ({
   fullWidth = false,
   className = "",
   disabled = false,
+  type = "button",
   ...props
 }: Props) => {
   const baseStyles =
-    "inline-flex items-center justify-center gap-2 cursor-pointer rounded-xl font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-60 disabled:cursor-not-allowed";
+    "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-primary/10 disabled:cursor-not-allowed disabled:opacity-60";
 
   const variants = {
-    primary: "bg-primary text-white hover:bg-primary-hover",
-    secondary: "bg-surface text-text border border-border hover:bg-background",
-    outline: "border border-border bg-transparent text-text hover:bg-surface",
-    destructive: "bg-destructive text-white hover:opacity-90",
+    primary:
+      "bg-primary text-white hover:bg-primary-hover active:scale-[0.98]",
+
+    secondary:
+      "border border-border bg-surface text-text hover:bg-background active:scale-[0.98]",
+
+    outline:
+      "border border-border bg-transparent text-text hover:bg-surface active:scale-[0.98]",
+
+    destructive:
+      "bg-destructive text-white hover:opacity-90 active:scale-[0.98]",
+
     ghost:
       "bg-transparent text-text-secondary hover:bg-surface hover:text-text",
   };
@@ -38,6 +47,7 @@ const BaseButton = ({
   return (
     <button
       {...props}
+      type={type}
       disabled={disabled || loading}
       className={`
         ${baseStyles}
@@ -48,8 +58,9 @@ const BaseButton = ({
       `}
     >
       {loading && (
-        <span className="size-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        <span className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
       )}
+
       {children}
     </button>
   );

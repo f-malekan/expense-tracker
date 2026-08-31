@@ -15,27 +15,26 @@ const BaseModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/50"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 md:items-center"
       onClick={onClose}
     >
-      {/* Desktop */}
-      <div className="hidden min-h-screen items-center justify-center md:flex">
-        <div
-          className="w-full max-w-lg rounded-xl bg-white p-6"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {children}
-        </div>
-      </div>
-
-      {/* Mobile */}
-      <div className="flex min-h-screen items-end md:hidden">
-        <div
-          className="w-full rounded-t-2xl bg-white p-5"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {children}
-        </div>
+      <div
+        className="
+          w-full
+          max-h-[90vh]
+          overflow-y-auto
+          bg-surface
+          text-text
+          rounded-t-2xl
+          p-5
+          shadow-lg
+          md:max-w-lg
+          md:rounded-2xl
+          md:p-6
+        "
+        onClick={(e) => e.stopPropagation()}
+      >
+        {children}
       </div>
     </div>
   );

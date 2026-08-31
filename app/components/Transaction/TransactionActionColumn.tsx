@@ -3,10 +3,15 @@
 import React, { useState, useTransition } from "react";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { deleteTransaction } from "@/lib/actions/transaction";
+
 import BaseModal from "../Base/BaseModal";
 import TransactionForm from "./TransactionForm";
+import ConfirmationModal from "../Base/ConfirmationModal";
+
 import type { CategoryType } from "@/lib/types/category";
 import type { TransactionDataType } from "@/lib/types/transaction";
+
+import iziToast from "izitoast";
 
 interface Props {
   transaction: TransactionDataType;
@@ -15,22 +20,27 @@ interface Props {
 
 const TransactionActionColumn = ({ transaction, categories }: Props) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
   const [isPending, startTransition] = useTransition();
 
   const deleteRow = () => {
-    const confirmed = window.confirm("آیا از حذف این تراکنش مطمئن هستید؟");
-
-    if (!confirmed) return;
-
     startTransition(async () => {
       const result = await deleteTransaction(transaction.id);
 
-      if (!result.success) {
-        alert(result.message);
-        return;
-      }
+      if (result.success) {
+        iziToast.success({
+          message: result.message,
+          rtl: true,
+        });
 
-      alert(result.message);
+        setDeleteModalOpen(false);
+      } else {
+        iziToast.error({
+          message: result.message,
+          rtl: true,
+        });
+      }
     });
   };
 
@@ -40,24 +50,38 @@ const TransactionActionColumn = ({ transaction, categories }: Props) => {
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <button
           type="button"
           aria-label="ویرایش تراکنش"
           onClick={() => setIsEditOpen(true)}
-          className="rounded-md p-2 transition hover:bg-gray-100"
+          className="
+            rounded-lg p-2
+            text-text-secondary
+            transition-colors
+            hover:bg-primary/10
+            hover:text-primary
+          "
         >
-          <FiEdit2 size={18} />
+          <FiEdit2 size={17} />
         </button>
 
         <button
           type="button"
           aria-label="حذف تراکنش"
-          onClick={deleteRow}
+          onClick={() => setDeleteModalOpen(true)}
           disabled={isPending}
-          className="rounded-md p-2 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+          className="
+            rounded-lg p-2
+            text-text-secondary
+            transition-colors
+            hover:bg-destructive/10
+            hover:text-destructive
+            disabled:cursor-not-allowed
+            disabled:opacity-50
+          "
         >
-          <FiTrash2 size={18} />
+          <FiTrash2 size={17} />
         </button>
       </div>
 
@@ -65,10 +89,16 @@ const TransactionActionColumn = ({ transaction, categories }: Props) => {
         <TransactionForm
           transaction={transaction}
           categories={categories}
-          onSuccess={handleEditSuccess}
           mode="edit"
+          onSuccess={handleEditSuccess}
         />
       </BaseModal>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onDelete={deleteRow}
+      />
     </>
   );
 };

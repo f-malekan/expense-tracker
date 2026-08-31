@@ -1,47 +1,171 @@
 @import "tailwindcss";
+@import "izitoast/dist/css/iziToast.min.css";
 
 :root {
-  --background: #f8fafc;
+  /* Backgrounds */
+  --background: #f5f7f6;
   --surface: #ffffff;
-  --border: #e2e8f0;
-  --text: #0f172a;
-  --text-secondary: #64748b;
-  --primary: #059669;
-  --primary-hover: #047857;
-  --destructive: #dc2626;
+
+  /* Borders */
+  --border: #e4e9e7;
+
+  /* Text */
+  --text: #17201d;
+  --text-secondary: #6b7773;
+
+  /* Brand */
+  --primary: #0f766e;
+  --primary-hover: #115e59;
+  --primary-light: #ccfbf1;
+
+  /* Status */
   --success: #16a34a;
+  --destructive: #e05252;
   --warning: #d97706;
+
+  /* Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 16px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.08);
 }
 
 .dark {
-  --background: #0f172a;
-  --surface: #1e293b;
-  --border: #334155;
-  --text: #f1f5f9;
-  --text-secondary: #94a3b8;
+  /* Backgrounds */
+  --background: #101614;
+  --surface: #18201d;
+
+  /* Borders */
+  --border: #29332f;
+
+  /* Text */
+  --text: #f1f5f3;
+  --text-secondary: #9aa9a3;
+
+  /* Brand */
   --primary: #34d399;
   --primary-hover: #6ee7b7;
-  --destructive: #f87171;
+  --primary-light: #123c34;
+
+  /* Status */
   --success: #4ade80;
+  --destructive: #f87171;
   --warning: #fbbf24;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 16px rgb(0 0 0 / 0.25);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.3);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+
   --color-border: var(--border);
+
   --color-text: var(--text);
   --color-text-secondary: var(--text-secondary);
+
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
-  --color-destructive: var(--destructive);
+  --color-primary-light: var(--primary-light);
+
   --color-success: var(--success);
+  --color-destructive: var(--destructive);
   --color-warning: var(--warning);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
 }
 
 body {
+  min-height: 100vh;
+  margin: 0;
+
   background-color: var(--background);
   color: var(--text);
+
   font-family: var(--font-vazirmatn), system-ui, sans-serif;
+
   direction: rtl;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+::selection {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+/* =========================
+   iziToast
+========================= */
+
+.iziToast {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 1rem !important;
+  box-shadow: var(--shadow-lg) !important;
+  color: var(--text) !important;
+  font-family: var(--font-vazirmatn), system-ui, sans-serif !important;
+}
+
+.iziToast-message {
+  color: var(--text) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+}
+
+.iziToast-close {
+  color: var(--text-secondary) !important;
+}
+
+.iziToast-color-green {
+  border-right: 4px solid var(--success) !important;
+}
+
+.iziToast-color-red {
+  border-right: 4px solid var(--destructive) !important;
+}
+
+.iziToast-color-yellow {
+  border-right: 4px solid var(--warning) !important;
 }

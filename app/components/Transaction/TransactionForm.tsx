@@ -13,11 +13,12 @@ import { transactionSchema } from "@/lib/validations/transaction";
 import { CategoryType } from "@/lib/types/category";
 import { TransactionType } from "@/app/generated/prisma/enums";
 import { TransactionDataType } from "@/lib/types/transaction";
+import iziToast from "izitoast";
 
 type FormData = z.infer<typeof transactionSchema>;
 
 interface Props {
-  categories: CategoryType[];
+  categories?: CategoryType[];
   mode?: "create" | "edit";
   transaction?: TransactionDataType;
   onSuccess?: () => void;
@@ -68,74 +69,137 @@ const TransactionForm = ({
     }
 
     if (result.success) {
+      iziToast.success({
+        message: result.message,
+        rtl: true,
+      });
+
       onSuccess?.();
+    } else {
+      iziToast.error({
+        message: result.message,
+        rtl: true,
+      });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      {/* Title */}
       <BaseInput
+        label="عنوان تراکنش"
         {...register("title")}
-        placeholder="عنوان"
+        placeholder="مثلاً خرید روزانه"
         error={errors.title?.message ? [errors.title.message] : undefined}
       />
 
+      {/* Amount */}
       <BaseInput
+        label="مبلغ"
+        type="number"
         {...register("amount", {
           valueAsNumber: true,
         })}
-        type="number"
-        placeholder="مقدار"
+        placeholder="مبلغ را وارد کنید"
         error={errors.amount?.message ? [errors.amount.message] : undefined}
       />
 
-      <BaseSelectbox {...register("type")}>
-        <option value="EXPENSE">هزینه</option>
-        <option value="INCOME">درآمد</option>
+      {/* Type */}
+      <BaseSelectbox
+        label="نوع تراکنش"
+        {...register("type")}
+        error={errors.type?.message ? [errors.type.message] : undefined}
+      >
+        <option value={TransactionType.EXPENSE}>هزینه</option>
+        <option value={TransactionType.INCOME}>درآمد</option>
       </BaseSelectbox>
 
-      <BaseSelectbox {...register("categoryId")}>
-        <option value="">انتخاب دسته‌بندی</option>
+      {/* Category */}
+      {categories && (
+        <BaseSelectbox
+          label="دسته‌بندی"
+          {...register("categoryId")}
+          error={
+            errors.categoryId?.message ? [errors.categoryId.message] : undefined
+          }
+        >
+          <option value="">انتخاب دسته‌بندی</option>
 
-        {categories
-          .filter((category) => {
-            const selectedType = control._formValues.type;
-
-            return category.type === selectedType;
-          })
-          .map((cat) => (
-            <option value={cat.id} key={cat.id}>
-              {cat.name}
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
             </option>
           ))}
-      </BaseSelectbox>
+        </BaseSelectbox>
+      )}
 
+      {/* Description */}
       <BaseInput
+        label="توضیحات"
         {...register("description")}
-        placeholder="توضیحات"
+        placeholder="توضیحات اختیاری"
         error={
           errors.description?.message ? [errors.description.message] : undefined
         }
       />
 
+      {/* Date */}
       <Controller
         name="date"
         control={control}
         render={({ field }) => (
-          <DatePicker
-            value={field.value}
-            onChange={(date) => field.onChange(date?.toDate())}
-            calendar={persian}
-            locale={persian_fa}
-            calendarPosition="bottom-right"
-          />
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-text">تاریخ</label>
+
+            <DatePicker
+              value={field.value}
+              onChange={(date) => field.onChange(date?.toDate())}
+              calendar={persian}
+              locale={persian_fa}
+              calendarPosition="bottom-right"
+              inputClass="
+                w-full
+                h-11
+                rounded-xl
+                border border-border
+                bg-surface
+                px-4
+                text-sm text-text
+                outline-none
+                transition
+                focus:border-primary
+                focus:ring-4
+                focus:ring-primary/10
+              "
+            />
+
+            {errors.date?.message && (
+              <span className="block text-xs text-destructive">
+                {errors.date.message}
+              </span>
+            )}
+          </div>
         )}
       />
 
+      {/* Submit */}
       <button
         type="submit"
         disabled={isSubmitting}
-        className="rounded-md px-4 py-2 disabled:opacity-50"
+        className="
+          h-11
+          w-full
+          rounded-xl
+          bg-primary
+          px-4
+          text-sm
+          font-medium
+          text-white
+          transition
+          hover:bg-primary-hover
+          disabled:cursor-not-allowed
+          disabled:opacity-60
+        "
       >
         {isSubmitting
           ? "در حال ذخیره..."
