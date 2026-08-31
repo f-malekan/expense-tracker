@@ -1,3 +1,5 @@
+import { CategoryType } from "./category";
+
 export interface TransactionDataType {
   id: string;
   title: string;
@@ -11,4 +13,6 @@ export interface TransactionDataType {
 
   createdAt: Date;
   updatedAt: Date;
+
+  category?: CategoryType;
 }
