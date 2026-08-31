@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { TransactionType } from "@/app/generated/prisma/enums";
 
 export const SignupFormSchema = z.object({
   name: z.string().min(2, { error: "نام باید حداقل ۲ کاراکتر باشد." }).trim(),
@@ -19,13 +20,32 @@ export const SignupFormSchema = z.object({
     }),
 });
 
-export type FormState =
+export const loginFormSchema = z.object({
+  email: z.email(),
+  password: z.string().min(8, { error: "رمز عبور باید حداقل ۸ کاراکتر باشد." }),
+});
+
+export type SignupFormState =
   | {
-      errors?: {
-        name?: string[];
-        email?: string[];
-        password?: string[];
-      };
-      message?: string;
+      success: boolean;
+      message:
+        | {
+            name?: string[];
+            email?: string[];
+            password?: string[];
+          }
+        | string;
+    }
+  | undefined;
+
+export type LoginFormState =
+  | {
+      success: boolean;
+      message:
+        | string
+        | {
+            email?: string[];
+            password?: string[];
+          };
     }
   | undefined;

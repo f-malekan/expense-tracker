@@ -1,11 +1,17 @@
-'use server'
+"use server";
 
-import { SignupFormSchema, FormState } from "@/lib/definitions";
+import {
+  loginFormSchema,
+  LoginFormState,
+  SignupFormSchema,
+  SignupFormState,
+} from "@/lib/validations/auth";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { signIn } from "../auth";
+import { signIn } from "../../app/auth";
+import { AuthError } from "next-auth";
 
-export async function signup(state: FormState, formData: FormData) {
+export async function signup(state: SignupFormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -14,7 +20,8 @@ export async function signup(state: FormState, formData: FormData) {
 
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      success: false,
+      message: validatedFields.error.flatten().fieldErrors,
     };
   }
 
@@ -56,4 +63,35 @@ export async function signup(state: FormState, formData: FormData) {
     };
   }
   return { success: true, message: "ثبت‌نام با موفقیت انجام شد!" };
+}
+
+export async function login(state: LoginFormState, formData: FormData) {
+  const validatedFields = loginFormSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      message: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { email, password } = validatedFields.data;
+
+  try {
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    return { success: true, message: "ورود موفقیت‌آمیز بود" };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "مشکلی پیش آمده است",
+    };
+  }
 }

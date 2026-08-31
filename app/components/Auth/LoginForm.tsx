@@ -1,24 +1,15 @@
 "use client";
 
-import { signup } from "@/lib/actions/auth";
+import { login } from "@/lib/actions/auth";
 import { useActionState } from "react";
 import BaseInput from "../Base/BaseInput";
 import BaseButton from "../Base/BaseButton";
 
-export default function SignupForm() {
-  const [state, action, pending] = useActionState(signup, undefined);
+export default function LoginForm() {
+  const [state, action, pending] = useActionState(login, undefined);
 
   return (
-    <form action={action}>
-      <BaseInput
-        name="name"
-        type="name"
-        required
-        placeholder="نام خود را وارد کنید"
-        label="نام"
-        error={state?.errors?.name}
-      />
-
+    <form action={action} className="space-y-5">
       <BaseInput
         name="email"
         type="email"
@@ -34,13 +25,16 @@ export default function SignupForm() {
         required
         placeholder="••••••••"
         label="رمز عبور"
-        className="mb-4"
         error={state?.errors?.password}
       />
-      {/* <button disabled={pending} type="submit">
-        Sign Up
-      </button> */}
-      <BaseButton type="submit">ثبت نام</BaseButton>
+
+      {state?.message && (
+        <p className="text-sm text-destructive">{state.message}</p>
+      )}
+
+      <BaseButton type="submit" loading={pending} fullWidth>
+        ورود
+      </BaseButton>
     </form>
   );
 }
