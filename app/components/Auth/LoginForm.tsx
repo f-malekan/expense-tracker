@@ -8,15 +8,21 @@ import BaseButton from "../Base/BaseButton";
 export default function LoginForm() {
   const [state, action, pending] = useActionState(login, undefined);
 
+  const fieldErrors =
+    typeof state?.message === "object" ? state.message : undefined;
+
+  const generalError =
+    typeof state?.message === "string" ? state.message : undefined;
+
   return (
-    <form action={action} className="space-y-5">
+    <form action={action} className="space-y-4">
       <BaseInput
         name="email"
         type="email"
         required
         placeholder="example@email.com"
         label="ایمیل"
-        error={state?.errors?.email}
+        error={fieldErrors?.email}
       />
 
       <BaseInput
@@ -25,14 +31,21 @@ export default function LoginForm() {
         required
         placeholder="••••••••"
         label="رمز عبور"
-        error={state?.errors?.password}
+        error={fieldErrors?.password}
       />
 
-      {state?.message && (
-        <p className="text-sm text-destructive">{state.message}</p>
+      {generalError && (
+        <p className="text-xs leading-5 text-destructive">
+          {generalError}
+        </p>
       )}
 
-      <BaseButton type="submit" loading={pending} fullWidth>
+      <BaseButton
+        type="submit"
+        loading={pending}
+        fullWidth
+        className="mt-2"
+      >
         ورود
       </BaseButton>
     </form>

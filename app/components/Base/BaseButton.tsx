@@ -2,7 +2,6 @@ import { ButtonHTMLAttributes } from "react";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "destructive" | "ghost";
-  size?: "sm" | "md" | "lg";
   loading?: boolean;
   fullWidth?: boolean;
 }
@@ -10,7 +9,6 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 const BaseButton = ({
   children,
   variant = "primary",
-  size = "md",
   loading = false,
   fullWidth = false,
   className = "",
@@ -19,29 +17,23 @@ const BaseButton = ({
   ...props
 }: Props) => {
   const baseStyles =
-    "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-primary/10 disabled:cursor-not-allowed disabled:opacity-60";
+    "inline-flex h-8 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50";
 
   const variants = {
     primary:
-      "bg-primary text-white hover:bg-primary-hover active:scale-[0.98]",
+      "bg-primary text-white hover:bg-primary-hover",
 
     secondary:
-      "border border-border bg-surface text-text hover:bg-background active:scale-[0.98]",
+      "border border-border bg-surface text-text hover:bg-background",
 
     outline:
-      "border border-border bg-transparent text-text hover:bg-surface active:scale-[0.98]",
+      "border border-border bg-transparent text-text hover:bg-surface",
 
     destructive:
-      "bg-destructive text-white hover:opacity-90 active:scale-[0.98]",
+      "bg-destructive text-white hover:opacity-90",
 
     ghost:
       "bg-transparent text-text-secondary hover:bg-surface hover:text-text",
-  };
-
-  const sizes = {
-    sm: "h-9 px-3 text-sm",
-    md: "h-11 px-5 text-sm",
-    lg: "h-12 px-6 text-base",
   };
 
   return (
@@ -52,13 +44,12 @@ const BaseButton = ({
       className={`
         ${baseStyles}
         ${variants[variant]}
-        ${sizes[size]}
         ${fullWidth ? "w-full" : ""}
         ${className}
       `}
     >
       {loading && (
-        <span className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+        <span className="size-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
       )}
 
       {children}

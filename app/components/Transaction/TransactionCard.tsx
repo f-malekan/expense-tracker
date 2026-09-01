@@ -1,6 +1,14 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { CategoryType } from "@/lib/types/category";
 import { TransactionDataType } from "@/lib/types/transaction";
 import TransactionActionColumn from "./TransactionActionColumn";
+import {
+  FiArrowDownLeft,
+  FiArrowUpRight,
+  FiMoreVertical,
+} from "react-icons/fi";
 
 interface Props {
   transactions: TransactionDataType[];
@@ -13,109 +21,159 @@ const TransactionCard = ({
   categories,
   className = "",
 }: Props) => {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [actionId, setActionId] = useState<string | null>(null);
+
+  const actionRef = useRef<HTMLDivElement>(null);
+
+  // Close actions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        actionRef.current &&
+        !actionRef.current.contains(event.target as Node)
+      ) {
+        setActionId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className={`space-y-3 ${className}`}>
+    <div className={`space-y-1 ${className}`}>
       {transactions.map((transaction) => {
         const isIncome = transaction.type === "INCOME";
+        const isExpanded = expandedId === transaction.id;
+        const isActionOpen = actionId === transaction.id;
+
+        const formattedDate = new Intl.DateTimeFormat("fa-IR", {
+          month: "short",
+          day: "numeric",
+        }).format(new Date(transaction.date));
 
         return (
           <article
             key={transaction.id}
-            className="
-              rounded-2xl
-              border border-border
-              bg-surface
-              p-4
-              shadow-sm
-            "
+            className="rounded-xl border border-border bg-surface"
           >
-            {/* Header */}
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <h2 className="truncate text-sm font-semibold text-text">
-                  {transaction.title}
-                </h2>
-
-                {transaction.description && (
-                  <p className="mt-1 line-clamp-2 text-xs text-text-secondary">
-                    {transaction.description}
-                  </p>
+            {/* Main Row */}
+            <div
+              onClick={() => setExpandedId(isExpanded ? null : transaction.id)}
+              className="
+                flex cursor-pointer items-center gap-2.5
+                px-3 py-2.5
+              "
+            >
+              {/* Icon */}
+              <div
+                className={`
+                  flex size-8 shrink-0 items-center justify-center
+                  rounded-lg
+                  ${
+                    isIncome
+                      ? "bg-success/10 text-success"
+                      : "bg-destructive/10 text-destructive"
+                  }
+                `}
+              >
+                {isIncome ? (
+                  <FiArrowDownLeft size={15} />
+                ) : (
+                  <FiArrowUpRight size={15} />
                 )}
               </div>
 
-              <TransactionActionColumn
-                transaction={{
-                  ...transaction,
-                  amount: transaction.amount.toString(),
-                }}
-                categories={categories}
-              />
-            </div>
+              {/* Title + Category + Date */}
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-text">
+                  {transaction.title}
+                </p>
 
-            {/* Amount */}
-            <div className="mt-4 flex items-center justify-between">
-              <span className="text-xs text-text-secondary">
-                مبلغ
-              </span>
+                <p className="mt-0.5 truncate text-[11px] text-text-secondary">
+                  {transaction.category?.name ?? "بدون دسته‌بندی"}
+                  <span className="mx-1">·</span>
+                  {formattedDate}
+                </p>
+              </div>
 
-              <span
-                className={`text-base font-bold ${
-                  isIncome
-                    ? "text-success"
-                    : "text-destructive"
-                }`}
+              {/* Amount */}
+              <p
+                className={`
+                  shrink-0 text-xs font-semibold
+                  ${isIncome ? "text-success" : "text-destructive"}
+                `}
               >
                 {isIncome ? "+" : "-"}
-                {transaction.amount.toString()}
-              </span>
-            </div>
+                {Number(transaction.amount).toLocaleString("fa-IR")}
+              </p>
 
-            {/* Details */}
-            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-border pt-4">
-              <div>
-                <p className="text-xs text-text-secondary">
-                  دسته‌بندی
-                </p>
-                <p className="mt-1 text-sm font-medium text-text">
-                  {transaction.category?.name ?? "-"}
-                </p>
-              </div>
+              {/* Actions */}
+              <div
+                ref={isActionOpen ? actionRef : null}
+                className="relative shrink-0"
+              >
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
 
-              <div>
-                <p className="text-xs text-text-secondary">
-                  نوع
-                </p>
-
-                <span
-                  className={`
-                    mt-1 inline-flex rounded-full
-                    px-2.5 py-1
-                    text-xs font-medium
-                    ${
-                      isIncome
-                        ? "bg-success/10 text-success"
-                        : "bg-destructive/10 text-destructive"
-                    }
-                  `}
+                    setActionId(isActionOpen ? null : transaction.id);
+                  }}
+                  className="
+                    flex size-7 items-center justify-center
+                    rounded-md
+                    text-text-secondary
+                    transition-colors
+                    hover:bg-background
+                    hover:text-text
+                  "
+                  aria-label="عملیات"
                 >
-                  {isIncome ? "درآمد" : "هزینه"}
-                </span>
-              </div>
+                  <FiMoreVertical size={16} />
+                </button>
 
-              <div>
-                <p className="text-xs text-text-secondary">
-                  تاریخ
-                </p>
-
-                <p className="mt-1 text-sm text-text">
-                  {new Intl.DateTimeFormat("fa-IR", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  }).format(new Date(transaction.date))}
-                </p>
+                {isActionOpen && (
+                  <div
+                    className="
+                      absolute left-0 top-full z-20 mt-1
+                      min-w-32
+                      rounded-lg
+                      border border-border
+                      bg-surface
+                      p-1
+                      shadow-md
+                    "
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <TransactionActionColumn
+                      transaction={{
+                        ...transaction,
+                        amount: transaction.amount.toString(),
+                      }}
+                      categories={categories}
+                    />
+                  </div>
+                )}
               </div>
             </div>
+
+            {/* Expanded Details */}
+            {isExpanded && transaction.description && (
+              <div className="border-t border-border px-3 py-2.5">
+                <div className="flex items-start justify-between gap-4 text-xs">
+                  <span className="shrink-0 text-text-secondary">توضیحات</span>
+
+                  <span className="text-left text-text">
+                    {transaction.description}
+                  </span>
+                </div>
+              </div>
+            )}
           </article>
         );
       })}

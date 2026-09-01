@@ -8,15 +8,21 @@ import BaseButton from "../Base/BaseButton";
 export default function SignupForm() {
   const [state, action, pending] = useActionState(signup, undefined);
 
+  const fieldErrors =
+    typeof state?.message === "object" ? state.message : undefined;
+
+  const generalError =
+    typeof state?.message === "string" ? state.message : undefined;
+
   return (
-    <form action={action}>
+    <form action={action} className="space-y-4">
       <BaseInput
         name="name"
-        type="name"
+        type="text"
         required
         placeholder="نام خود را وارد کنید"
         label="نام"
-        error={state?.errors?.name}
+        error={fieldErrors?.name}
       />
 
       <BaseInput
@@ -25,7 +31,7 @@ export default function SignupForm() {
         required
         placeholder="example@email.com"
         label="ایمیل"
-        error={state?.errors?.email}
+        error={fieldErrors?.email}
       />
 
       <BaseInput
@@ -34,13 +40,16 @@ export default function SignupForm() {
         required
         placeholder="••••••••"
         label="رمز عبور"
-        className="mb-4"
-        error={state?.errors?.password}
+        error={fieldErrors?.password}
       />
-      {/* <button disabled={pending} type="submit">
-        Sign Up
-      </button> */}
-      <BaseButton type="submit">ثبت نام</BaseButton>
+
+      {generalError && (
+        <p className="text-xs leading-5 text-destructive">{generalError}</p>
+      )}
+
+      <BaseButton type="submit" loading={pending} fullWidth className="mt-2">
+        ثبت‌نام
+      </BaseButton>
     </form>
   );
 }

@@ -1,9 +1,9 @@
 import { getTransactions } from "@/lib/queries/transaction";
 import { getCategories } from "@/lib/queries/category";
 
-import AddTransactionButton from "../components/Transaction/AddTransactionButton";
-import TransActionTable from "../components/Transaction/TransActionTable";
-import TransactionCard from "../components/Transaction/TransactionCard";
+import AddTransactionButton from "../../components/Transaction/AddTransactionButton";
+import TransActionTable from "../../components/Transaction/TransActionTable";
+import TransactionCard from "../../components/Transaction/TransactionCard";
 
 const TransactionsPage = async () => {
   const [{ success, message, data }, categoriesResult] = await Promise.all([
@@ -40,21 +40,13 @@ const TransactionsPage = async () => {
     })) ?? [];
 
   return (
-    <main className="mx-auto w-full max-w-7xl p-4 pb-24 md:p-6 md:pb-6">
-      {/* Header */}
+    <>
       <div className="mb-6 flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold text-text md:text-2xl">تراکنش‌ها</h1>
-
-          <p className="mt-1 text-sm text-text-secondary">
-            مدیریت درآمدها و هزینه‌های شما
-          </p>
-        </div>
+        <h1 className="text-xl font-bold text-text md:text-2xl">تراکنش‌ها</h1>
 
         <AddTransactionButton categories={categories} />
       </div>
 
-      {/* Content */}
       {formattedData.length === 0 ? (
         <div className="rounded-2xl border border-border bg-surface p-8 text-center shadow-sm md:p-12">
           <h2 className="text-base font-semibold text-text">
@@ -86,7 +78,7 @@ const TransactionsPage = async () => {
           </div>
         </>
       )}
-    </main>
+    </>
   );
 };
 

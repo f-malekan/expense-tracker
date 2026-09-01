@@ -1,7 +1,7 @@
 import React from "react";
 import { getCategories } from "@/lib/queries/category";
-import CategoryTable from "../components/Category/CategoryTable";
-import AddCategoryButton from "../components/Category/AddCategoryButton";
+import CategoryTable from "../../components/Category/CategoryTable";
+import AddCategoryButton from "../../components/Category/AddCategoryButton";
 
 const CategoriesPage = async () => {
   const { data: categories, success, message } = await getCategories();
