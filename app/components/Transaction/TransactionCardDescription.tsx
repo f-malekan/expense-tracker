@@ -16,9 +16,9 @@ const TransactionCardDescription = ({ transactionId, description }: Props) => {
     <div>
       <button
         onClick={() => setExpandedId(isExpanded ? null : transactionId)}
-        className="w-full flex justify-center"
+        className="w-full flex justify-center pb-2"
       >
-        <FaAngleDown />
+        <FaAngleDown size={12}/>
       </button>
 
       {isExpanded && (

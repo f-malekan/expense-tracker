@@ -26,10 +26,6 @@ const TransactionTable = ({ transactions, categories }: Props) => {
               </th>
 
               <th className="px-5 py-4 text-right text-xs font-medium text-text-secondary">
-                نوع
-              </th>
-
-              <th className="px-5 py-4 text-right text-xs font-medium text-text-secondary">
                 مبلغ
               </th>
 
@@ -48,14 +44,11 @@ const TransactionTable = ({ transactions, categories }: Props) => {
               return (
                 <tr
                   key={transaction.id}
-                  className="
-                    border-b border-border
-                    last:border-0
-                    transition-colors
-                    hover:bg-background/50
-                  "
+                  className="border-b border-border last:border-0 transition-colors hover:bg-background/50"
                 >
-                  <td className="px-6 py-5">
+                  <td className="px-6 py-5 flex items-center gap-3">
+                    <TransactionTypeIcon transactionType={transaction.type} />
+
                     <div className="max-w-xs">
                       <p className="font-semibold text-text">
                         {transaction.title}
@@ -73,10 +66,6 @@ const TransactionTable = ({ transactions, categories }: Props) => {
                     <span className="inline-flex rounded-lg bg-background px-3 py-1.5 text-xs font-medium text-text">
                       {transaction.category?.name ?? "بدون دسته‌بندی"}
                     </span>
-                  </td>
-
-                  <td className="px-5 py-5">
-                    <TransactionTypeIcon transactionType={transaction.type} />
                   </td>
 
                   <td className="px-5 py-5">
