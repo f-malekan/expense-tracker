@@ -1,33 +1,28 @@
 import { getTransactions } from "@/lib/queries/transaction";
 import { getCategories } from "@/lib/queries/category";
-
 import AddTransactionButton from "../../components/Transaction/AddTransactionButton";
-import TransActionTable from "../../components/Transaction/TransactionTable";
+import TransactionTable from "../../components/Transaction/TransactionTable";
 import TransactionCard from "../../components/Transaction/TransactionCard";
+import ErrorState from "@/app/components/Base/ErrorState";
+import EmptyState from "@/app/components/Base/EmptyState";
 
 const TransactionsPage = async () => {
-  const [{ success, message, data }, categoriesResult] = await Promise.all([
+  const [{ success, data }, categoriesResult] = await Promise.all([
     getTransactions(),
     getCategories(),
   ]);
 
-  if (!success) {
-    return (
-      <main className="mx-auto w-full max-w-7xl p-4 md:p-6">
-        <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
-          <p className="text-sm text-destructive">{message}</p>
-        </div>
-      </main>
-    );
+  if (!success || !categoriesResult.success) {
+    return <ErrorState />;
   }
 
-  if (!categoriesResult.success || !categoriesResult.data) {
+  if (!data) {
+    return <EmptyState />;
+  }
+
+  if (!categoriesResult.data) {
     return (
-      <main className="mx-auto w-full max-w-7xl p-4 md:p-6">
-        <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
-          <p className="text-sm text-destructive">{categoriesResult.message}</p>
-        </div>
-      </main>
+      <EmptyState description="ابتدا باید دسته بندی بسازید تا بتوانید تراکنش ایجاد کنید!" />
     );
   }
 
@@ -64,7 +59,7 @@ const TransactionsPage = async () => {
       ) : (
         <>
           <div className="hidden md:block">
-            <TransActionTable
+            <TransactionTable
               transactions={formattedData}
               categories={categories}
             />
