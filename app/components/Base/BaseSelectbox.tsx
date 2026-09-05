@@ -2,7 +2,7 @@ import { SelectHTMLAttributes } from "react";
 
 interface Props extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
-  error?: string[];
+  error?: string | string[];
   containerClassName?: string;
 }
 
@@ -15,6 +15,8 @@ const BaseSelectbox = ({
   children,
   ...props
 }: Props) => {
+  const errors = typeof error === "string" ? [error] : error;
+
   return (
     <div className={`space-y-2 ${containerClassName}`}>
       {label && (
@@ -47,7 +49,7 @@ const BaseSelectbox = ({
         {children}
       </select>
 
-      {error?.map((err) => (
+      {errors?.map((err) => (
         <span key={err} className="block text-xs text-destructive">
           {err}
         </span>

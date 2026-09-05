@@ -2,7 +2,7 @@ import { getTransactions } from "@/lib/queries/transaction";
 import { getCategories } from "@/lib/queries/category";
 
 import AddTransactionButton from "../../components/Transaction/AddTransactionButton";
-import TransActionTable from "../../components/Transaction/TransActionTable";
+import TransActionTable from "../../components/Transaction/TransactionTable";
 import TransactionCard from "../../components/Transaction/TransactionCard";
 
 const TransactionsPage = async () => {

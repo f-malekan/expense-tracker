@@ -3,11 +3,9 @@
 import React, { useState } from "react";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { deleteTransaction } from "@/lib/actions/transaction";
-
 import BaseModal from "../Base/BaseModal";
 import TransactionForm from "./TransactionForm";
 import ConfirmationModal from "../Base/ConfirmationModal";
-
 import type { CategoryType } from "@/lib/types/category";
 import type { TransactionDataType } from "@/lib/types/transaction";
 
@@ -46,7 +44,7 @@ const TransactionActionColumn = ({ transaction, categories }: Props) => {
 
   return (
     <>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center justify-center gap-1">
         <button
           type="button"
           aria-label="ویرایش تراکنش"

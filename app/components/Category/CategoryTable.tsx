@@ -16,10 +16,6 @@ const CategoryTable = ({ categories }: Props) => {
             </th>
 
             <th className="px-5 py-4 text-right font-medium text-text-secondary">
-              نوع
-            </th>
-
-            <th className="px-5 py-4 text-right font-medium text-text-secondary">
               تاریخ ایجاد
             </th>
 
@@ -31,7 +27,6 @@ const CategoryTable = ({ categories }: Props) => {
 
         <tbody>
           {categories.map((category) => {
-            const isIncome = category.type === "INCOME";
 
             return (
               <tr
@@ -40,18 +35,6 @@ const CategoryTable = ({ categories }: Props) => {
               >
                 <td className="px-5 py-4 font-medium text-text">
                   {category.name}
-                </td>
-
-                <td className="px-5 py-4">
-                  <span
-                    className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${
-                      isIncome
-                        ? "bg-success/10 text-success"
-                        : "bg-destructive/10 text-destructive"
-                    }`}
-                  >
-                    {isIncome ? "درآمد" : "هزینه"}
-                  </span>
                 </td>
 
                 <td className="px-5 py-4 text-text-secondary">

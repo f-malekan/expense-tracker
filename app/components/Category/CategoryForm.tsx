@@ -4,11 +4,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import BaseInput from "../Base/BaseInput";
-import BaseSelectbox from "../Base/BaseSelectbox";
 import BaseButton from "../Base/BaseButton";
 import { addCategory, updateCategory } from "@/lib/actions/category";
 import { CategoryType } from "@/lib/types/category";
-import { TransactionType } from "@/app/generated/prisma/enums";
 import { categorySchema } from "@/lib/validations/category";
 
 type FormData = z.infer<typeof categorySchema>;
@@ -31,29 +29,16 @@ export default function CategoryForm({
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(categorySchema),
-
-    defaultValues:
-      mode === "edit" && category
-        ? {
-            name: category.name,
-            type: category.type,
-          }
-        : {
-            name: "",
-            type: TransactionType.EXPENSE,
-          },
+    defaultValues: {
+      name: mode === "edit" && category ? category.name : "",
+    },
   });
 
   const onSubmit = async (data: FormData) => {
-    let result;
-
-    if (mode === "create") {
-      result = await addCategory(data);
-    } else {
-      if (!category) return;
-
-      result = await updateCategory(category.id, data);
-    }
+    const result =
+      mode === "create"
+        ? await addCategory(data)
+        : await updateCategory(category!.id, data);
 
     if (result.success) {
       onSuccess?.();
@@ -74,14 +59,9 @@ export default function CategoryForm({
         error={errors.name?.message ? [errors.name.message] : undefined}
       />
 
-      <BaseSelectbox
-        {...register("type")}
-        label="نوع دسته‌بندی"
-        error={errors.type?.message ? [errors.type.message] : undefined}
-      >
-        <option value={TransactionType.EXPENSE}>هزینه</option>
-        <option value={TransactionType.INCOME}>درآمد</option>
-      </BaseSelectbox>
+      {errors.root && (
+        <p className="text-xs text-destructive">{errors.root.message}</p>
+      )}
 
       <BaseButton type="submit" fullWidth loading={isSubmitting}>
         {mode === "create" ? "افزودن دسته‌بندی" : "ذخیره تغییرات"}

@@ -60,41 +60,28 @@ const TransactionForm = ({
   });
 
   const onSubmit = async (data: FormData) => {
-    let result;
-
-    if (mode === "create") {
-      result = await addTransaction(data);
-    } else {
-      if (!transaction) return;
-
-      result = await updateTransaction(transaction.id, data);
-    }
+    const result =
+      mode === "create"
+        ? await addTransaction(data)
+        : await updateTransaction(transaction!.id, data);
 
     if (result.success) {
-      iziToast.success({
-        message: result.message,
-        rtl: true,
-      });
-
+      iziToast.success({ message: result.message, rtl: true });
       onSuccess?.();
     } else {
-      setError("root", {
-        message: result.message || "خطایی رخ داد",
-      });
+      setError("root", { message: result.message || "خطایی رخ داد" });
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5">
-      {/* Title */}
       <BaseInput
         label="عنوان"
         {...register("title")}
         placeholder="مثلاً خرید روزانه"
-        error={errors.title?.message ? [errors.title.message] : undefined}
+        error={errors.title?.message}
       />
 
-      {/* Amount */}
       <BaseInput
         label="مبلغ"
         type="number"
@@ -102,27 +89,23 @@ const TransactionForm = ({
           valueAsNumber: true,
         })}
         placeholder="مبلغ را وارد کنید"
-        error={errors.amount?.message ? [errors.amount.message] : undefined}
+        error={errors.amount?.message}
       />
 
-      {/* Type */}
       <BaseSelectbox
         label="نوع"
         {...register("type")}
-        error={errors.type?.message ? [errors.type.message] : undefined}
+        error={errors.type?.message}
       >
         <option value={TransactionType.EXPENSE}>هزینه</option>
         <option value={TransactionType.INCOME}>درآمد</option>
       </BaseSelectbox>
 
-      {/* Category */}
       {categories && (
         <BaseSelectbox
           label="دسته‌بندی"
           {...register("categoryId")}
-          error={
-            errors.categoryId?.message ? [errors.categoryId.message] : undefined
-          }
+          error={errors.categoryId?.message}
         >
           <option value="">انتخاب دسته‌بندی</option>
 
@@ -134,17 +117,13 @@ const TransactionForm = ({
         </BaseSelectbox>
       )}
 
-      {/* Description */}
       <BaseInput
         label="توضیحات"
         {...register("description")}
         placeholder="اختیاری"
-        error={
-          errors.description?.message ? [errors.description.message] : undefined
-        }
+        error={errors.description?.message}
       />
 
-      {/* Date */}
       <Controller
         name="date"
         control={control}
@@ -158,20 +137,7 @@ const TransactionForm = ({
               calendar={persian}
               locale={persian_fa}
               calendarPosition="bottom-right"
-              inputClass="
-                h-8
-                w-full
-                rounded-lg
-                border border-border
-                bg-surface
-                px-3
-                text-xs
-                text-text
-                outline-none
-                transition-colors
-                focus:border-primary
-                focus:ring-2
-                focus:ring-primary/10
+              inputClass="h-8 w-full rounded-lg border border-border bg-surface px-3 text-xs text-text outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/10
               "
             />
 
@@ -184,7 +150,10 @@ const TransactionForm = ({
         )}
       />
 
-      {/* Submit */}
+      {errors.root && (
+        <p className="text-xs text-destructive">{errors.root.message}</p>
+      )}
+
       <BaseButton
         type="submit"
         loading={isSubmitting}

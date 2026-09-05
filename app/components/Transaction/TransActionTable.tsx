@@ -1,13 +1,16 @@
 import { CategoryType } from "@/lib/types/category";
 import { TransactionDataType } from "@/lib/types/transaction";
 import TransactionActionColumn from "./TransactionActionColumn";
+import { formatDate } from "@/lib/utils/transaction";
+import TransactionAmount from "./TransactionAmount";
+import TransactionTypeIcon from "./TransactionTypeIcon";
 
 interface Props {
   transactions: TransactionDataType[];
   categories: CategoryType[];
 }
 
-const TransActionTable = ({ transactions, categories }: Props) => {
+const TransactionTable = ({ transactions, categories }: Props) => {
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
       <div className="overflow-x-auto">
@@ -42,8 +45,6 @@ const TransActionTable = ({ transactions, categories }: Props) => {
 
           <tbody>
             {transactions.map((transaction) => {
-              const isIncome = transaction.type === "INCOME";
-
               return (
                 <tr
                   key={transaction.id}
@@ -54,7 +55,6 @@ const TransActionTable = ({ transactions, categories }: Props) => {
                     hover:bg-background/50
                   "
                 >
-                  {/* Title */}
                   <td className="px-6 py-5">
                     <div className="max-w-xs">
                       <p className="font-semibold text-text">
@@ -69,56 +69,27 @@ const TransActionTable = ({ transactions, categories }: Props) => {
                     </div>
                   </td>
 
-                  {/* Category */}
                   <td className="px-5 py-5">
                     <span className="inline-flex rounded-lg bg-background px-3 py-1.5 text-xs font-medium text-text">
                       {transaction.category?.name ?? "بدون دسته‌بندی"}
                     </span>
                   </td>
 
-                  {/* Type */}
                   <td className="px-5 py-5">
-                    <span
-                      className={`
-                        inline-flex items-center
-                        rounded-full
-                        px-3 py-1
-                        text-xs font-medium
-                        ${
-                          isIncome
-                            ? "bg-success/10 text-success"
-                            : "bg-destructive/10 text-destructive"
-                        }
-                      `}
-                    >
-                      {isIncome ? "درآمد" : "هزینه"}
-                    </span>
+                    <TransactionTypeIcon transactionType={transaction.type} />
                   </td>
 
-                  {/* Amount */}
                   <td className="px-5 py-5">
-                    <div
-                      className={`
-                        font-bold
-                        ${isIncome ? "text-success" : "text-destructive"}
-                      `}
-                    >
-                      <span className="ml-1">{isIncome ? "+" : "-"}</span>
-
-                      {Number(transaction.amount).toLocaleString("fa-IR")}
-                    </div>
+                    <TransactionAmount
+                      transactionType={transaction.type}
+                      amount={transaction.amount}
+                    />
                   </td>
 
-                  {/* Date */}
                   <td className="whitespace-nowrap px-5 py-5 text-text-secondary">
-                    {new Intl.DateTimeFormat("fa-IR", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    }).format(new Date(transaction.date))}
+                    {formatDate(transaction.date)}
                   </td>
 
-                  {/* Actions */}
                   <td className="px-5 py-5">
                     <div className="flex justify-center">
                       <TransactionActionColumn
@@ -140,4 +111,4 @@ const TransActionTable = ({ transactions, categories }: Props) => {
   );
 };
 
-export default TransActionTable;
+export default TransactionTable;
