@@ -40,7 +40,6 @@ const AppHeader = () => {
           px-4 sm:px-6 lg:px-8
         "
       >
-        {/* Desktop Navigation */}
         <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -97,7 +96,6 @@ const AppHeader = () => {
           })}
         </nav>
 
-        {/* Theme Button */}
         <ThemeToggle />
       </div>
     </header>

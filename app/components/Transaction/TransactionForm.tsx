@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import BaseInput from "../Base/BaseInput";
 import BaseSelectbox from "../Base/BaseSelectbox";
+import BaseButton from "../Base/BaseButton";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
@@ -34,6 +35,7 @@ const TransactionForm = ({
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(transactionSchema),
@@ -76,18 +78,17 @@ const TransactionForm = ({
 
       onSuccess?.();
     } else {
-      iziToast.error({
-        message: result.message,
-        rtl: true,
+      setError("root", {
+        message: result.message || "خطایی رخ داد",
       });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5">
       {/* Title */}
       <BaseInput
-        label="عنوان تراکنش"
+        label="عنوان"
         {...register("title")}
         placeholder="مثلاً خرید روزانه"
         error={errors.title?.message ? [errors.title.message] : undefined}
@@ -106,7 +107,7 @@ const TransactionForm = ({
 
       {/* Type */}
       <BaseSelectbox
-        label="نوع تراکنش"
+        label="نوع"
         {...register("type")}
         error={errors.type?.message ? [errors.type.message] : undefined}
       >
@@ -137,7 +138,7 @@ const TransactionForm = ({
       <BaseInput
         label="توضیحات"
         {...register("description")}
-        placeholder="توضیحات اختیاری"
+        placeholder="اختیاری"
         error={
           errors.description?.message ? [errors.description.message] : undefined
         }
@@ -148,8 +149,8 @@ const TransactionForm = ({
         name="date"
         control={control}
         render={({ field }) => (
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-text">تاریخ</label>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-medium text-text">تاریخ</label>
 
             <DatePicker
               value={field.value}
@@ -158,23 +159,24 @@ const TransactionForm = ({
               locale={persian_fa}
               calendarPosition="bottom-right"
               inputClass="
+                h-8
                 w-full
-                h-11
-                rounded-xl
+                rounded-lg
                 border border-border
                 bg-surface
-                px-4
-                text-sm text-text
+                px-3
+                text-xs
+                text-text
                 outline-none
-                transition
+                transition-colors
                 focus:border-primary
-                focus:ring-4
+                focus:ring-2
                 focus:ring-primary/10
               "
             />
 
             {errors.date?.message && (
-              <span className="block text-xs text-destructive">
+              <span className="block text-[11px] text-destructive">
                 {errors.date.message}
               </span>
             )}
@@ -183,30 +185,14 @@ const TransactionForm = ({
       />
 
       {/* Submit */}
-      <button
+      <BaseButton
         type="submit"
-        disabled={isSubmitting}
-        className="
-          h-11
-          w-full
-          rounded-xl
-          bg-primary
-          px-4
-          text-sm
-          font-medium
-          text-white
-          transition
-          hover:bg-primary-hover
-          disabled:cursor-not-allowed
-          disabled:opacity-60
-        "
+        loading={isSubmitting}
+        fullWidth
+        className="mt-1"
       >
-        {isSubmitting
-          ? "در حال ذخیره..."
-          : mode === "create"
-            ? "افزودن تراکنش"
-            : "ذخیره تغییرات"}
-      </button>
+        {mode === "create" ? "افزودن تراکنش" : "ذخیره تغییرات"}
+      </BaseButton>
     </form>
   );
 };

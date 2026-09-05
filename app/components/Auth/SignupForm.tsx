@@ -4,15 +4,22 @@ import { signup } from "@/lib/actions/auth";
 import { useActionState } from "react";
 import BaseInput from "../Base/BaseInput";
 import BaseButton from "../Base/BaseButton";
+import { SignupFormState } from "@/lib/validations/auth";
 
 export default function SignupForm() {
-  const [state, action, pending] = useActionState(signup, undefined);
+  const initialState: SignupFormState = {
+    success: false,
+    message: "",
+  };
+  const [state, action, pending] = useActionState(signup, initialState);
 
   const fieldErrors =
     typeof state?.message === "object" ? state.message : undefined;
 
-  const generalError =
-    typeof state?.message === "string" ? state.message : undefined;
+  const generalMessage =
+    typeof state?.message === "string" && !!state.message.length
+      ? state.message
+      : undefined;
 
   return (
     <form action={action} className="space-y-4">
@@ -43,8 +50,14 @@ export default function SignupForm() {
         error={fieldErrors?.password}
       />
 
-      {generalError && (
-        <p className="text-xs leading-5 text-destructive">{generalError}</p>
+      {generalMessage && (
+        <p
+          className={`text-xs leading-5 ${
+            state.success ? "text-success" : "text-destructive"
+          }`}
+        >
+          {generalMessage}
+        </p>
       )}
 
       <BaseButton type="submit" loading={pending} fullWidth className="mt-2">

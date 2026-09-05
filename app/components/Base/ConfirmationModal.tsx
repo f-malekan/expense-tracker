@@ -12,10 +12,10 @@ const ConfirmationModal = ({ isOpen, onClose, onDelete }: Props) => {
     <BaseModal open={isOpen} onClose={onClose}>
       <div className="space-y-6">
         <div>
-          <h2 className="text-lg font-bold text-text">حذف تراکنش</h2>
+          <h2 className="text-lg font-bold text-text">حذف سطر</h2>
 
           <p className="mt-2 text-sm leading-6 text-text-secondary">
-            آیا از حذف این تراکنش مطمئن هستید؟ این عملیات قابل بازگشت نیست.
+            آیا از حذف این سطر مطمئن هستید؟ این عملیات قابل بازگشت نیست.
           </p>
         </div>
 

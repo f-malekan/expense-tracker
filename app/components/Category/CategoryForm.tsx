@@ -3,11 +3,9 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import BaseInput from "../Base/BaseInput";
 import BaseSelectbox from "../Base/BaseSelectbox";
 import BaseButton from "../Base/BaseButton";
-
 import { addCategory, updateCategory } from "@/lib/actions/category";
 import { CategoryType } from "@/lib/types/category";
 import { TransactionType } from "@/app/generated/prisma/enums";
@@ -25,10 +23,11 @@ export default function CategoryForm({
   mode = "create",
   category,
   onSuccess,
-}: Props) {
+}: Readonly<Props>) {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(categorySchema),
@@ -58,6 +57,10 @@ export default function CategoryForm({
 
     if (result.success) {
       onSuccess?.();
+    } else {
+      setError("root", {
+        message: result.message || "خطایی رخ داد",
+      });
     }
   };
 
@@ -77,7 +80,6 @@ export default function CategoryForm({
         error={errors.type?.message ? [errors.type.message] : undefined}
       >
         <option value={TransactionType.EXPENSE}>هزینه</option>
-
         <option value={TransactionType.INCOME}>درآمد</option>
       </BaseSelectbox>
 

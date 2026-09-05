@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState } from "react";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { deleteTransaction } from "@/lib/actions/transaction";
 
@@ -22,26 +22,22 @@ const TransactionActionColumn = ({ transaction, categories }: Props) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  const [isPending, startTransition] = useTransition();
+  const deleteRow = async () => {
+    const { success, message } = await deleteTransaction(transaction.id);
 
-  const deleteRow = () => {
-    startTransition(async () => {
-      const result = await deleteTransaction(transaction.id);
+    if (success) {
+      iziToast.success({
+        message: message,
+        rtl: true,
+      });
 
-      if (result.success) {
-        iziToast.success({
-          message: result.message,
-          rtl: true,
-        });
-
-        setDeleteModalOpen(false);
-      } else {
-        iziToast.error({
-          message: result.message,
-          rtl: true,
-        });
-      }
-    });
+      setDeleteModalOpen(false);
+    } else {
+      iziToast.error({
+        message: message,
+        rtl: true,
+      });
+    }
   };
 
   const handleEditSuccess = () => {
@@ -70,7 +66,6 @@ const TransactionActionColumn = ({ transaction, categories }: Props) => {
           type="button"
           aria-label="حذف تراکنش"
           onClick={() => setDeleteModalOpen(true)}
-          disabled={isPending}
           className="
             rounded-lg p-2
             text-text-secondary

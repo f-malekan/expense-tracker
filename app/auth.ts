@@ -26,7 +26,9 @@ const authOptions: NextAuthConfig = {
           },
         });
 
-        if (!user?.password) return null;
+        if (!user?.password) {
+          throw new Error("کاربر یافت نشد");
+        }
 
         const isPasswordValid = await bcrypt.compare(
           credentials.password as string,
@@ -34,14 +36,13 @@ const authOptions: NextAuthConfig = {
         );
 
         if (!isPasswordValid) {
-          return null;
+          throw new Error("رمز عبور اشتباه است");
         }
 
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          image: user.image,
         };
       },
     }),
@@ -62,7 +63,7 @@ const authOptions: NextAuthConfig = {
       return session;
     },
   },
-  
+
   pages: {
     signIn: "/login",
   },

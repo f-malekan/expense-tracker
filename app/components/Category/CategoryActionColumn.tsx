@@ -13,7 +13,7 @@ interface Props {
   category: CategoryType;
 }
 
-const TransactionActionColumn = ({ category }: Props) => {
+const CategoryActionColumn = ({ category }: Props) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -21,11 +21,18 @@ const TransactionActionColumn = ({ category }: Props) => {
   const deleteRow = async () => {
     const { success, message } = await deleteCategory(category.id);
 
-    iziToast.success({
-      message: message,
-      rtl: true,
-    });
-    setDeleteModalOpen(false);
+    if (success) {
+      iziToast.success({
+        message: message,
+        rtl: true,
+      });
+      setDeleteModalOpen(false);
+    } else {
+      iziToast.error({
+        message: message,
+        rtl: true,
+      });
+    }
   };
 
   const handleEditSuccess = () => {
@@ -71,4 +78,4 @@ const TransactionActionColumn = ({ category }: Props) => {
   );
 };
 
-export default TransactionActionColumn;
+export default CategoryActionColumn;
