@@ -8,6 +8,7 @@ import BaseButton from "../Base/BaseButton";
 import { addCategory, updateCategory } from "@/lib/actions/category";
 import { CategoryType } from "@/lib/types/category";
 import { categorySchema } from "@/lib/validations/category";
+import BaseMessage from "../Base/BaseMessage";
 
 type FormData = z.infer<typeof categorySchema>;
 
@@ -59,8 +60,8 @@ export default function CategoryForm({
         error={errors.name?.message ? [errors.name.message] : undefined}
       />
 
-      {errors.root && (
-        <p className="text-xs text-destructive">{errors.root.message}</p>
+      {errors.root?.message && (
+        <BaseMessage message={errors.root.message} variant="destructive" />
       )}
 
       <BaseButton type="submit" fullWidth loading={isSubmitting}>

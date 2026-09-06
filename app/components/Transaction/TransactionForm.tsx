@@ -6,15 +6,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import BaseInput from "../Base/BaseInput";
 import BaseSelectbox from "../Base/BaseSelectbox";
 import BaseButton from "../Base/BaseButton";
-import DatePicker from "react-multi-date-picker";
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
 import { addTransaction, updateTransaction } from "@/lib/actions/transaction";
 import { transactionSchema } from "@/lib/validations/transaction";
 import { CategoryType } from "@/lib/types/category";
 import { TransactionType } from "@/app/generated/prisma/enums";
 import { TransactionDataType } from "@/lib/types/transaction";
 import iziToast from "izitoast";
+import BaseMessage from "../Base/BaseMessage";
+import BaseDatePicker from "../Base/BaseDatePicker";
 
 type FormData = z.infer<typeof transactionSchema>;
 
@@ -128,30 +127,16 @@ const TransactionForm = ({
         name="date"
         control={control}
         render={({ field }) => (
-          <div className="space-y-1.5">
-            <label className="block text-xs font-medium text-text">تاریخ</label>
-
-            <DatePicker
-              value={field.value}
-              onChange={(date) => field.onChange(date?.toDate())}
-              calendar={persian}
-              locale={persian_fa}
-              calendarPosition="bottom-right"
-              inputClass="h-8 w-full rounded-lg border border-border bg-surface px-3 text-xs text-text outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/10
-              "
-            />
-
-            {errors.date?.message && (
-              <span className="block text-[11px] text-destructive">
-                {errors.date.message}
-              </span>
-            )}
-          </div>
+          <BaseDatePicker
+            value={field.value}
+            onChange={(date) => field.onChange(date)}
+            error={errors.date?.message}
+          />
         )}
       />
 
-      {errors.root && (
-        <p className="text-xs text-destructive">{errors.root.message}</p>
+      {errors.root?.message && (
+        <BaseMessage message={errors.root.message} variant="destructive" />
       )}
 
       <BaseButton

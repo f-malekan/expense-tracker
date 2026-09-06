@@ -12,14 +12,7 @@ const ThemeToggle = () => {
     <button
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="
-        flex size-9 items-center justify-center
-        rounded-lg
-        text-text-secondary
-        transition-colors
-        hover:bg-surface
-        hover:text-text
-      "
+      className="flex size-9 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-surface hover:text-text"
       aria-label="تغییر تم"
     >
       {isDark ? <FiSun size={17} /> : <FiMoon size={17} />}

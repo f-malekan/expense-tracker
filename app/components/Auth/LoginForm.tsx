@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import BaseInput from "../Base/BaseInput";
 import BaseButton from "../Base/BaseButton";
 import { LoginFormState } from "@/lib/validations/auth";
+import BaseMessage from "../Base/BaseMessage";
 
 export default function LoginForm() {
   const initialState: LoginFormState = {
@@ -42,13 +43,10 @@ export default function LoginForm() {
       />
 
       {generalMessage && (
-        <p
-          className={`text-xs leading-5 ${
-            state.success ? "text-success" : "text-destructive"
-          }`}
-        >
-          {generalMessage}
-        </p>
+        <BaseMessage
+          message={generalMessage}
+          variant={state.success ? "success" : "destructive"}
+        />
       )}
 
       <BaseButton type="submit" loading={pending} fullWidth className="mt-2">

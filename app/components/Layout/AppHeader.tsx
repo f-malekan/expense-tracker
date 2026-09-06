@@ -2,31 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiBarChart2, FiList, FiPieChart, FiSettings } from "react-icons/fi";
 import ThemeToggle from "./ThemeToggle";
-
-const navItems = [
-  {
-    href: "/",
-    label: "داشبورد",
-    icon: FiPieChart,
-  },
-  {
-    href: "/transactions",
-    label: "تراکنش‌ها",
-    icon: FiList,
-  },
-  {
-    href: "/statistics",
-    label: "آمار",
-    icon: FiBarChart2,
-  },
-  {
-    href: "/settings",
-    label: "تنظیمات",
-    icon: FiSettings,
-  },
-];
+import { NAV_ITEMS } from "../../../lib/constants";
 
 const AppHeader = () => {
   const pathname = usePathname();
@@ -41,7 +18,7 @@ const AppHeader = () => {
         "
       >
         <nav className="hidden items-center gap-1 md:flex">
-          {navItems.map((item) => {
+          {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
 
@@ -70,7 +47,7 @@ const AppHeader = () => {
         </nav>
 
         <nav className="flex items-center gap-1 md:hidden">
-          {navItems.map((item) => {
+          {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
 
