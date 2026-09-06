@@ -46,3 +46,6 @@ prisma/migrations/migration_lock.toml
 skills-lock.json
 prisma/migrations/20260812085712_init/migration.sql
 mine.md
+
+
+prisma/migrations/
