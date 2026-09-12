@@ -46,7 +46,6 @@ export const addCategory = async (input: CategoryInput) => {
     const category = await prisma.category.create({
       data: {
         name,
-        type,
         userId,
       },
     });
@@ -133,7 +132,6 @@ export const updateCategory = async (id: string, input: CategoryInput) => {
       },
       data: {
         name,
-        type,
       },
     });
 
