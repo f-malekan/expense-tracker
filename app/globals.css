@@ -23,6 +23,10 @@
   --destructive: #e05252;
   --warning: #d97706;
 
+  --success-shade: #e6f6f0;
+  --destructive-shade: #fceaea;
+  --warning-shade: #fff5d9;
+
   /* Radius */
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -58,6 +62,10 @@
   --destructive: #f87171;
   --warning: #fbbf24;
 
+  --success-shade: #16352d;
+  --destructive-shade: #3a2022;
+  --warning-shade: #3a3218;
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.2);
   --shadow-md: 0 4px 16px rgb(0 0 0 / 0.25);
@@ -80,6 +88,10 @@
   --color-success: var(--success);
   --color-destructive: var(--destructive);
   --color-warning: var(--warning);
+
+  --color-success-shade: var(--success-shade);
+  --color-destructive-shade: var(--destructive-shade);
+  --color-warning-shade: var(--warning-shade);
 
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);

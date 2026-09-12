@@ -25,21 +25,17 @@ export const addTransaction = async (input: TransactionInput) => {
   if (!result.success) {
     return {
       success: false,
-      message:
-        result.error.issues[0]?.message ??
-        "اطلاعات واردشده معتبر نیست.",
+      message: result.error.issues[0]?.message ?? "اطلاعات واردشده معتبر نیست.",
     };
   }
 
-  const { title, amount, type, categoryId, description, date } =
-    result.data;
+  const { title, amount, type, categoryId, description, date } = result.data;
 
   try {
     const category = await prisma.category.findFirst({
       where: {
         id: categoryId,
         userId,
-        type,
       },
     });
 
@@ -108,14 +104,11 @@ export const updateTransaction = async (
   if (!result.success) {
     return {
       success: false,
-      message:
-        result.error.issues[0]?.message ??
-        "اطلاعات واردشده معتبر نیست.",
+      message: result.error.issues[0]?.message ?? "اطلاعات واردشده معتبر نیست.",
     };
   }
 
-  const { title, amount, type, categoryId, description, date } =
-    result.data;
+  const { title, amount, type, categoryId, description, date } = result.data;
 
   try {
     const transaction = await prisma.transaction.findFirst({
@@ -136,7 +129,6 @@ export const updateTransaction = async (
       where: {
         id: categoryId,
         userId,
-        type,
       },
     });
 
@@ -176,8 +168,7 @@ export const updateTransaction = async (
 
     return {
       success: false,
-      message:
-        "خطایی در بروزرسانی تراکنش رخ داد. لطفاً دوباره تلاش کنید.",
+      message: "خطایی در بروزرسانی تراکنش رخ داد. لطفاً دوباره تلاش کنید.",
     };
   }
 };
@@ -232,8 +223,7 @@ export const deleteTransaction = async (id: string) => {
 
     return {
       success: false,
-      message:
-        "خطایی در حذف تراکنش رخ داد. لطفاً دوباره تلاش کنید.",
+      message: "خطایی در حذف تراکنش رخ داد. لطفاً دوباره تلاش کنید.",
     };
   }
 };

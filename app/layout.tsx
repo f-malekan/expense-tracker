@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/Theme/ThemeProvider";
+import MainLayout from "./components/Layout/MainLayout";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
@@ -27,7 +28,9 @@ export default function RootLayout({
       className={`${vazirmatn.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <MainLayout>{children}</MainLayout>
+        </ThemeProvider>
       </body>
     </html>
   );
